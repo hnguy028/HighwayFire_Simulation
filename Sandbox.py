@@ -5,6 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from Fire import Fire
 from matplotlib import style
 
 style.use('fivethirtyeight')
@@ -16,7 +17,7 @@ ax1 = fig.add_subplot(1,1,1)
 # a barrier is defined as a tuple of time/x value
 # and length/y value
 # barrier_data = open('barrier_set.csv','r').read()
-barrier_set = [(10,10),(30,25),(60,40)]
+barrier_set = [(-1,2),(-3,4),(3,3)]
 
 lx = -1
 ly = -1
@@ -26,9 +27,12 @@ dy = 0
 
 t = -1
 
+flag = False
+
+fire = Fire()
 
 def animate(i):
-   global lx, ly, dx, dy, t
+    global lx, ly, dx, dy, t, flag
    # graph_data = open('data1.csv','r').read()
    # lines = graph_data.split('\n')
 
@@ -41,46 +45,40 @@ def animate(i):
    #         xs.append(float(x))
    #         ys.append(float(y))
 
-   print(str(t) + " -- " + str(i))
+    # xx = np.linspace(-lx/2, lx/2, 1000)
+    # yy = np.linspace(-ly/2, ly/2, 1000)
+    ax1.clear()
+    # ax1.plot(xs, ys)
+    # ax1.plot(-xx + dx, xx + dy, linestyle='solid')
+    # ax1.plot(yy + i, yy-i, linestyle='solid')
 
-   if t >= 10 and t <=20:
-       dy += 1
+    for (c1,c2) in fire.get_boundary():
+        ax1.plot(c1, c2, linestyle='solid', color='r')
 
-       print("Here")
-   else:
-       dx += 0.5
-       dy += 0.5
-
-       lx += 1
-       ly += 1
-
-   xx = np.linspace(-lx/2, lx/2, 1000)
-   yy = np.linspace(-ly/2, ly/2, 1000)
-   ax1.clear()
-   # ax1.plot(xs, ys)
-   ax1.plot(-xx + dx, xx + dy, linestyle='solid')
-   ax1.plot(yy + i, yy-i, linestyle='solid')
-
-   for p in barrier_set:
+    # draw barriers
+    for p in barrier_set:
        ax1.plot([p[0],p[0]],[0,p[1]], linestyle='dashed')
-   ax1.set_xlim([0, 100])
-   ax1.set_ylim([0, 100])
 
-   t += 1
-   return 0
+    # fix graph bounds
+    ax1.set_xlim([-15, 15])
+    ax1.set_ylim([-10, 20])
+
+    fire.increment(barrier_set)
+
+    nu = fire.cs / fire.t
+    print(str(fire.cs) + "/" + str(fire.t) + " : " + str(nu))
 
 
 def find_intersection(line1, line2, barriers):
-   # first intersection of any barrier and line1 will determine if line2
-   # even exists, and where it would begin
-
-   # handled differently if intersection is at the top of the barrier
-
-   # return empty list if no intersection with barriers
-   # else return x,y coordinate of intersection (should be integer coordinates)
-   pass
+    pass
 
 
-ani = animation.FuncAnimation(fig, animate, interval=1000)
-plt.show()
+def get_xx_yy(coord1, coord2):
+    return [coord1[0], coord2[0]],[coord1[1], coord2[1]]
+
+
+if __name__ == '__main__':
+    ani = animation.FuncAnimation(fig, animate, frames=10, interval=1000, repeat=False)
+    plt.show()
+
 

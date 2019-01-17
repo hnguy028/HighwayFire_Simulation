@@ -36,24 +36,28 @@ class BPoint:
                     self.y += (d * self.p_direction)
 
                     t_dist -= d
-
                 if t_dist > 0:
                     # barrier = barrier_set[[b[0] for b in barrier_set].index(self.x)]
                     # barrier_set.sort(key=lambda t: t[0])
 
                     # find right most barrier to self.x
-                    next_barrier_x = min(xc for xc in [b[0] for b in barrier_set] if xc > self.x)
-                    barrier = barrier_set[[b[0] for b in barrier_set].index(next_barrier_x)]
+                    r_barriers = [xc for xc in [b[0] for b in barrier_set] if xc > self.x] if self.p_direction > 0 else [xc for xc in [b[0] for b in barrier_set] if xc < self.x]
 
-                    # move right as much as possible
-                    d = min(t_dist, self.x - barrier[0])
-                    self.x += (d * self.p_direction)
+                    if len(r_barriers) > 0:
+                        next_barrier_x = min(r_barriers) if self.p_direction > 0 else max(r_barriers)
+                        barrier = barrier_set[[b[0] for b in barrier_set].index(next_barrier_x)]
 
-                    t_dist -= d
+                        # move right as much as possible
+                        d = min(t_dist, abs(self.x - barrier[0]))
+                        self.x += (d * self.p_direction)
 
-            # find if point is at a barrier
-            # for barrier in barrier_set:
-            #     pass
+                        t_dist -= d
+
+                    else:
+                        # move right as much as possible
+                        self.x += (t_dist * self.p_direction)
+
+                        t_dist = 0
 
     def get_coord(self):
         return [self.x, self.y]

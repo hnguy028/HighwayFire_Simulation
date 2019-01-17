@@ -26,44 +26,53 @@ class Fire2:
     queue = []
 
     def __init__(self):
-        self.queue = [BPoint()]
+        self.queue = [BPoint("TYPE2", direction=-1), BPoint("CENTER"), BPoint("TYPE2")]
 
     def increment(self, barrier_set):
-        # for each BPoint -> BPoint.move(barrier_set)
-        pass
+        self.t += 1
+        for p in self.queue:
+            p.move(barrier_set)
 
     def get_boundary(self):
         boundary = []
 
-        p, q = get_xx_yy(self.center, self.right)
-        boundary.append((p, q))
+        it = iter(self.queue)
+        p = next(it)
 
-        p, q = get_xx_yy(self.center, self.left)
-        boundary.append((p, q))
-
-        if self.r2:
-            if self.r1:
-                p, q = get_xx_yy(self.right, self.r1)
-                boundary.append((p, q))
-
-                p, q = get_xx_yy(self.r1, self.r2)
-                boundary.append((p, q))
-
-            else:
-                p, q = get_xx_yy(self.right, self.r2)
-                boundary.append((p, q))
-
-        if self.l2:
-            if self.l1:
-                p, q = get_xx_yy(self.left, self.l1)
-                boundary.append((p, q))
-
-                p, q = get_xx_yy(self.l1, self.l2)
-                boundary.append((p, q))
-
-            else:
-                p, q = get_xx_yy(self.left, self.l2)
-                boundary.append((p, q))
+        for q in it:
+            a, b = get_xx_yy(p.get_coord(), q.get_coord())
+            boundary.append((a, b))
+            p = q
+        #
+        # p, q = get_xx_yy(self.center, self.right)
+        # boundary.append((p, q))
+        #
+        # p, q = get_xx_yy(self.center, self.left)
+        # boundary.append((p, q))
+        #
+        # if self.r2:
+        #     if self.r1:
+        #         p, q = get_xx_yy(self.right, self.r1)
+        #         boundary.append((p, q))
+        #
+        #         p, q = get_xx_yy(self.r1, self.r2)
+        #         boundary.append((p, q))
+        #
+        #     else:
+        #         p, q = get_xx_yy(self.right, self.r2)
+        #         boundary.append((p, q))
+        #
+        # if self.l2:
+        #     if self.l1:
+        #         p, q = get_xx_yy(self.left, self.l1)
+        #         boundary.append((p, q))
+        #
+        #         p, q = get_xx_yy(self.l1, self.l2)
+        #         boundary.append((p, q))
+        #
+        #     else:
+        #         p, q = get_xx_yy(self.left, self.l2)
+        #         boundary.append((p, q))
         #
         # boundary.append((self.l1, self.l2))
         # boundary.append((self.left, self.l1))

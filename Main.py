@@ -11,8 +11,8 @@ from matplotlib import style
 
 dir = "data/"
 
-fire = Fire1()
-fire2 = Fire2()
+# fire = Fire1()
+fire = Fire2()
 barrier_set = [(-1, 2), (-4, 4), (3, 3)]
 # barrier_set = [(-3, 4), (-2, 2), (1, 3), (2, 5)]
 # barrier_set = [(2, 4), (3, 6), (4, 8)]
@@ -25,7 +25,7 @@ def animate(i):
     for (c1, c2) in fire.get_boundary():
         if fire.t == max_frames - 1:
             ax1.plot(c1, c2, linestyle='-', linewidth=2, color='r')
-        else :
+        else:
             ax1.plot(c1, c2, linestyle='dashed', linewidth=1, color='grey')
 
     # draw barriers
@@ -33,30 +33,32 @@ def animate(i):
     #     ax1.plot([p[0], p[0]], [0, p[1]], linestyle='solid', color='black')
 
     # plot of cs(t)
-    ax2.clear()
-    ax2.plot(fire.cst)
+    # ax2.clear()
+    # ax2.plot(fire.cst)
 
     # increment logic
     fire.increment(barrier_set)
 
     # print table for time vs barrier consumed
-    res_str = "{0:4.0f} | {1:6.0f} | {2:7.5f}".format(fire.t, fire.cs, (fire.cs / fire.t))
-    print(res_str)
-    file.write("{0:4.0f},{1:6.0f},{2:7.5f}\n".format(fire.t, fire.cs, (fire.cs / fire.t)))
+    # res_str = "{0:4.0f} | {1:6.0f} | {2:7.5f}".format(fire.t, fire.cs, (fire.cs / fire.t))
+    # print(res_str)
+    # file.write("{0:4.0f},{1:6.0f},{2:7.5f}\n".format(fire.t, fire.cs, (fire.cs / fire.t)))
 
     # fix graph bounds
     ax1.set_xlim([-10, 10])
     ax1.set_ylim([-1, 10])
 
-    ax2.set_xlim([-1, 19])
-    ax2.set_ylim([-1, 19])
+    # ax2.set_xlim([-1, 19])
+    # ax2.set_ylim([-1, 19])
 
     if fire.t >= max_frames:
         ani.event_source.stop()
         fig.savefig(dir + "hf_sim" + time_code + ".png")
-        file.write(str(fire.cst))
-        file.close()
+        # file.write(str(fire.cst))
+        # file.close()
         print("Done")
+
+    print(str(i))
 
 
 if __name__ == '__main__':
@@ -66,7 +68,7 @@ if __name__ == '__main__':
 
     fig = plt.figure(figsize=(10, 7))
     ax1 = fig.add_subplot(2, 1, 1)
-    ax2 = fig.add_subplot(2, 1, 2)
+    # ax2 = fig.add_subplot(2, 1, 2)
 
     xlim = [-15, 15]
     ylim = [-1, 20]
@@ -75,8 +77,8 @@ if __name__ == '__main__':
     repeat = True
 
     # data output
-    file = open(dir + "hf_table" + time_code + ".csv", "w+")
-    file.write("time,length,slope\n")
+    # file = open(dir + "hf_table" + time_code + ".csv", "w+")
+    # file.write("time,length,slope\n")
 
     print("TIME | LENGTH | SLOPE")
 

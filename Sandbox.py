@@ -5,7 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from Fire import Fire
+from Fire1 import Fire1
 from matplotlib import style
 
 style.use('fivethirtyeight')
@@ -29,7 +29,7 @@ t = -1
 
 flag = False
 
-fire = Fire()
+fire = Fire1()
 
 def animate(i):
     global lx, ly, dx, dy, t, flag

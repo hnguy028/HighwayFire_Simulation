@@ -5,13 +5,17 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from Fire import *
+from Fire1 import *
+from Fire2 import *
 from matplotlib import style
 
 dir = "data/"
 
-fire = Fire()
+fire = Fire1()
+fire2 = Fire2()
 barrier_set = [(-1, 2), (-4, 4), (3, 3)]
+# barrier_set = [(-3, 4), (-2, 2), (1, 3), (2, 5)]
+# barrier_set = [(2, 4), (3, 6), (4, 8)]
 
 
 def animate(i):
@@ -68,7 +72,7 @@ if __name__ == '__main__':
     ylim = [-1, 20]
     max_frames = 10
     anim_interval = 1000
-    repeat = False
+    repeat = True
 
     # data output
     file = open(dir + "hf_table" + time_code + ".csv", "w+")

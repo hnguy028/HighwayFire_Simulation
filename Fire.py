@@ -1,21 +1,22 @@
 from BPoint import *
+from decimal import *
 
 
 class Fire:
 
-    cs = 0.0
+    cs = Decimal(0.0)
     qs = 0.0
 
-    cst = [0]
+    cst = [Decimal(0)]
     cs_t = [0]
     qst = [0]
 
-    t = 0.0
+    t = Decimal(0.0)
     time_step = 1.0
     queue_pos = []
     queue_neg = []
 
-    pref_step_size = 5
+    pref_step_size = Decimal(5)
 
     def __init__(self, time_step=1):
         self.time_step = time_step
@@ -44,7 +45,7 @@ class Fire:
             self.print_bound_points()
             exit()
 
-        csp = 0.0
+        csp = Decimal(0.0)
 
         i = 0
         prev_length = len(self.queue_neg)

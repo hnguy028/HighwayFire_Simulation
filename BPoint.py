@@ -1,6 +1,7 @@
 ##
 #
 ##
+from decimal import *
 
 
 class BPoint:
@@ -8,16 +9,16 @@ class BPoint:
     speed = 1.0
     time_step = 1.0
 
-    x = 0
-    y = 0
+    x = Decimal(0)
+    y = Decimal(0)
 
     p_type = None
     p_direction = 1
 
     def __init__(self, p_type, x=0, y=0, time_step=1.0, speed=1.0, direction=1, init_dist=-1.0):
         self.p_type = p_type
-        self.x = x
-        self.y = y
+        self.x = Decimal(x)
+        self.y = Decimal(y)
         self.speed = speed
         self.time_step = time_step
         self.p_direction = direction
@@ -25,7 +26,7 @@ class BPoint:
 
     # move current point t_dist time units
     def move(self, barrier_set, bpoint_set, t_dist=1):
-        t_dist = t_dist if self.init_dist == -1 else self.init_dist
+        t_dist = Decimal(t_dist) if self.init_dist == -1 else Decimal(self.init_dist)
         cs = 0
 
         if self.p_type == "CENTER":
@@ -35,8 +36,6 @@ class BPoint:
 
             # loop until distance required to travel is 0
             while t_dist > 0:
-                if self.p_direction > 0:
-                    print(str(self.x) + "," + str(self.y))
                 # if currently at a barrier, move up along it
                 if self.x in [b[0] for b in barrier_set]:
                     barrier = barrier_set[[b[0] for b in barrier_set].index(self.x)]

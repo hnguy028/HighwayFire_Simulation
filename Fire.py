@@ -18,8 +18,9 @@ class Fire:
 
     pref_step_size = Decimal(5)
 
-    def __init__(self, time_step=1):
+    def __init__(self, time_step=1, pref_step=5):
         self.time_step = time_step
+        self.pref_step_size = Decimal(pref_step)
         self.queue_neg = [BPoint("TYPE2", direction=-1, time_step=self.time_step)]
         self.queue_pos = [BPoint("CENTER", time_step=self.time_step),
                           BPoint("TYPE2", time_step=self.time_step)]

@@ -8,6 +8,7 @@ import matplotlib.animation as animation
 from Fire import *
 from matplotlib import style
 from decimal import *
+from BarrierFactory import *
 
 dir = "data/"
 time_step = Decimal(1)
@@ -24,9 +25,17 @@ in_barrier_set = [(-1, 2), (-3, 4), (3, 3)]
 # in_barrier_set = [(-1.5, 3.6), (0.8, 4.3), (3.1, 7.6)]
 # in_barrier_set = [(-150, 360), (80, 430), (310, 760)]
 # in_barrier_set = [('-1.5', '3.6'), ('0.8', '4.3'), ('3.1', '7.6')]
-in_barrier_set = [(-1.5, 3.6), (0.8, 4.3), (3.1, 7.6)]
+# in_barrier_set = [(-1.5, 3.6), (0.8, 4.3), (3.1, 7.6)]
 
 barrier_set = []
+
+
+def define_barriers(ind):
+    if ind == 0:
+        return barrier_set1()
+
+    # by default return
+    return in_barrier_set
 
 
 def d_barrier_set(_barrier_set):
@@ -64,11 +73,12 @@ def animate(i):
     ax2.grid(True)
 
     # if time step != 1, then we need eto give a a second array for the according time increments for each cst
-    ax2.plot(fire.cs_t, fire.cst)
+    ax2.plot([0, s2_line], [0, 2 * s2_line], linestyle='dashed', linewidth=2, color='grey')
+    ax2.plot(fire.cs_t, fire.cst, linewidth=1, color='r')
 
     # print table for time vs barrier consumed
     if fire.t > 0:
-        res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:7.5f}".format(i+1, fire.t, fire.cs, (fire.cs / fire.t))
+        res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i+1, fire.t, 2*fire.t, fire.cs, (fire.cs / fire.t))
         print(res_str)
         if writeToFile:
             file.write("{:4.2f},{:6.2f},{:7.5f}\n".format(fire.t, fire.cs, (fire.cs / fire.t)))
@@ -103,7 +113,7 @@ if __name__ == '__main__':
     style.use('fivethirtyeight')
 
     time_code = time.strftime("%Y%m%d-%H%M%S")
-    end_time = 10
+    end_time = 15
     anim_interval = 1000
     repeat = True
     writeToFile = False
@@ -117,6 +127,7 @@ if __name__ == '__main__':
     # ax1_dim = [-10, 10, 0, 10, 1]
     ax1_dim = [-end_time, end_time, 0, end_time, 1]
     ax2_dim = [0, 20, 0, 25, 1]
+    s2_line = 25
     # ax2_dim = [0, max_frames * time_step, 0, max_frames * time_step, 1]
 
     ax1.set_xticks(np.arange(ax1_dim[0]-1, ax1_dim[1]+1, ax1_dim[4]))
@@ -132,12 +143,17 @@ if __name__ == '__main__':
         file = open(dir + "hf_table" + time_code + ".csv", "w+")
         file.write("time,length,slope\n")
 
-    print("  i |   TIME |   LENGTH |   SLOPE")
+    # i, t, 2t, cst, qst
+    print("  i |   TIME | 2 x TIME |   LENGTH |   SLOPE")
+
+    # functionally generate barriers
+    in_barrier_set = define_barriers(0)
 
     # convert barrier set to decimal object for precision
     barrier_set = d_barrier_set(in_barrier_set)
 
     # draw barriers
+    ax1.axhline(y=0, linestyle='solid', color='black')
     for (x, y) in barrier_set:
         ax1.plot([float(x), float(x)], [0, float(y)], linestyle='solid', color='black')
 

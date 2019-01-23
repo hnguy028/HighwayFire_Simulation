@@ -23,8 +23,9 @@ class BPoint:
         self.p_direction = direction
         self.init_dist = init_dist
 
-    def move(self, barrier_set, bpoint_set):
-        t_dist = self.get_step_size() if self.init_dist == -1 else self.init_dist
+    # move current point t_dist time units
+    def move(self, barrier_set, bpoint_set, t_dist=1):
+        t_dist = t_dist if self.init_dist == -1 else self.init_dist
         cs = 0
 
         if self.p_type == "CENTER":
@@ -34,6 +35,8 @@ class BPoint:
 
             # loop until distance required to travel is 0
             while t_dist > 0:
+                if self.p_direction > 0:
+                    print(str(self.x) + "," + str(self.y))
                 # if currently at a barrier, move up along it
                 if self.x in [b[0] for b in barrier_set]:
                     barrier = barrier_set[[b[0] for b in barrier_set].index(self.x)]
@@ -167,6 +170,69 @@ class BPoint:
             self.init_dist = -1
 
         return cs
+
+    # returns the next min time between next k event and input dist
+    def dist_to_event(self, barrier_set, dist):
+        if dist <= 0:
+            print("Error dist is 0")
+            exit()
+
+        if self.p_type == "CENTER":
+            return dist
+        elif self.p_type == "TYPE2":
+            # if currently at a barrier, move up along it
+            if self.x in [b[0] for b in barrier_set]:
+                barrier = barrier_set[[b[0] for b in barrier_set].index(self.x)]
+
+                # either we traveled all of defined dist or we reached the top of the barrier
+                if abs(self.y - barrier[1]) > 0:
+                    return min(dist, abs(self.y - barrier[1]))
+
+            # find the next barrier in our respective direction
+            r_barriers = [xc for xc in [b[0] for b in barrier_set] if xc > self.x] if self.p_direction > 0 else \
+                [xc for xc in [b[0] for b in barrier_set] if xc < self.x]
+
+            # if there are any barriers left
+            if len(r_barriers) > 0:
+                next_barrier_x = min(r_barriers) if self.p_direction > 0 else max(r_barriers)
+                barrier = barrier_set[[b[0] for b in barrier_set].index(next_barrier_x)]
+
+                # move in that direction until we hit the barrier or traveled all of t_dist
+                return min(dist, abs(self.x - barrier[0]))
+            else:
+                return dist
+
+        elif self.p_type == "TYPE3":
+            if self.y > 0 and self.x in [b[0] for b in barrier_set]:
+                # either we traveled all of defined dist or we reached the horizontal axis y=0
+                return min(dist, abs(self.y))
+            else:
+                print("Error - TYPE3 not at a barrier or below horizon")
+                exit()
+        elif self.p_type == "TYPE4":
+            if self.x in [b[0] for b in barrier_set] and self.y > 0:
+                # either we traveled all of defined dist or we reached the horizontal axis y=0
+                return min(dist, abs(self.y))
+
+            if self.y == 0:
+                # find the next barrier in our respective direction
+                # need to check within current location and (0,0)
+                if self.p_direction > 0:
+                    r_barriers = [xc for xc in [b[0] for b in barrier_set] if xc > self.x]
+                else:
+                    r_barriers = [xc for xc in [b[0] for b in barrier_set] if xc < self.x]
+
+                # if there are any barriers left
+                if len(r_barriers) > 0:
+                    next_barrier_x = min(r_barriers) if self.p_direction > 0 else max(r_barriers)
+                    barrier = barrier_set[[b[0] for b in barrier_set].index(next_barrier_x)]
+
+                    # move in that direction until we hit the barrier or traveled all of t_dist
+                    return min(dist, abs(self.x - barrier[0]))
+
+                else:
+                    # No more barriers beyond this point, move all of defined distance in respective direction
+                    return dist
 
     def get_coord(self):
         return [self.x, self.y]

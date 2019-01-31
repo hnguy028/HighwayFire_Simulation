@@ -74,7 +74,7 @@ def animate(i):
 
     # if time step != 1, then we need eto give a a second array for the according time increments for each cst
     ax2.plot([0, s2_line], [0, 2 * s2_line], linestyle='dashed', linewidth=2, color='grey')
-    ax2.plot(fire.cs_t, fire.cst, linewidth=1, color='r')
+    ax2.plot(fire.cs_t, fire.get_modded_cst(), linewidth=1, color='r')
 
     # print table for time vs barrier consumed
     if fire.t > 0:
@@ -113,30 +113,32 @@ if __name__ == '__main__':
     style.use('fivethirtyeight')
 
     time_code = time.strftime("%Y%m%d-%H%M%S")
-    end_time = 15
+    end_time = 40
     anim_interval = 1000
     repeat = True
     writeToFile = False
+    visual = True
 
-    fig = plt.figure(figsize=(10, 7))
-    ax1 = fig.add_subplot(2, 1, 1)
-    ax2 = fig.add_subplot(2, 1, 2)
+    if visual:
+        fig = plt.figure(figsize=(10, 7))
+        ax1 = fig.add_subplot(2, 1, 1)
+        ax2 = fig.add_subplot(2, 1, 2)
 
-    # [lower_x, upper_x, lower_y, upper_y, grid_step]
+        # [lower_x, upper_x, lower_y, upper_y, grid_step]
 
-    # ax1_dim = [-10, 10, 0, 10, 1]
-    ax1_dim = [-end_time, end_time, 0, end_time, 1]
-    ax2_dim = [0, 20, 0, 25, 1]
-    s2_line = 25
-    # ax2_dim = [0, max_frames * time_step, 0, max_frames * time_step, 1]
+        # ax1_dim = [-10, 10, 0, 10, 1]
+        ax1_dim = [-end_time, end_time, 0, end_time, 1]
+        ax2_dim = [0, 100, 0, 100, 1]
+        s2_line = 25
+        # ax2_dim = [0, max_frames * time_step, 0, max_frames * time_step, 1]
 
-    ax1.set_xticks(np.arange(ax1_dim[0]-1, ax1_dim[1]+1, ax1_dim[4]))
-    ax1.set_yticks(np.arange(ax1_dim[2]-1, ax1_dim[3]+1, ax1_dim[4]))
-    ax1.grid(True)
+        ax1.set_xticks(np.arange(ax1_dim[0]-1, ax1_dim[1]+1, ax1_dim[4]))
+        ax1.set_yticks(np.arange(ax1_dim[2]-1, ax1_dim[3]+1, ax1_dim[4]))
+        ax1.grid(True)
 
-    ax2.set_xticks(np.arange(ax2_dim[0]-1, ax2_dim[1]+1, ax2_dim[4]))
-    ax2.set_yticks(np.arange(ax2_dim[2]-1, ax2_dim[3]+1, ax2_dim[4]))
-    ax2.grid(True)
+        # ax2.set_xticks(np.arange(ax2_dim[0]-1, ax2_dim[1]+1, ax2_dim[4]))
+        # ax2.set_yticks(np.arange(ax2_dim[2]-1, ax2_dim[3]+1, ax2_dim[4]))
+        # ax2.grid(True)
 
     # data output
     if writeToFile:
@@ -152,14 +154,21 @@ if __name__ == '__main__':
     # convert barrier set to decimal object for precision
     barrier_set = d_barrier_set(in_barrier_set)
 
-    # draw barriers
-    ax1.axhline(y=0, linestyle='solid', color='black')
-    for (x, y) in barrier_set:
-        ax1.plot([float(x), float(x)], [0, float(y)], linestyle='solid', color='black')
-
     # placeholder - to draw final boundary in red
     coords = None
 
-    # plot graph and animate
-    ani = animation.FuncAnimation(fig, animate, interval=anim_interval, repeat=repeat)
-    plt.show()
+    if visual:
+        # draw barriers
+        ax1.axhline(y=0, linestyle='solid', color='black')
+        for (x, y) in barrier_set:
+            ax1.plot([float(x), float(x)], [0, float(y)], linestyle='solid', color='black')
+
+        # plot graph and animate
+        ani = animation.FuncAnimation(fig, animate, interval=anim_interval, repeat=repeat)
+        plt.show()
+
+    else:
+        for i in range(0, 20):
+            fire.increment(barrier_set)
+            res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs, (fire.cs / fire.t))
+            print(res_str)

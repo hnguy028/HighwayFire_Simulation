@@ -101,6 +101,14 @@ class Fire:
 
         return boundary
 
+    def get_modded_cst(self):
+        res = []
+        res = self.cst
+        # for t in self.cst:
+        #     res.append(t - Decimal(1))
+
+        return res
+
     def print_bound_points(self):
         print("\n###############")
         for point in self.queue_neg + self.queue_pos:

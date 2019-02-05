@@ -9,6 +9,7 @@ from Fire import *
 from matplotlib import style
 from decimal import *
 from BarrierFactory import *
+import math
 
 dir = "data/"
 time_step = Decimal(1)
@@ -109,6 +110,24 @@ def animate(i):
         print("Program Terminated")
 
 
+def threshold_check(i, cs, t, occ, flag):
+    if flag:
+        return True, 0
+
+    slope = cs/t
+
+    if slope >= threshold:
+        occ += 1
+        if occ >= 1:
+            inp = input("Threshold Passed, Continue? [y/n/s]")
+            if inp == "n":
+                exit()
+            elif inp == "s":
+                return True, occ
+            else:
+                return False, occ
+
+
 if __name__ == '__main__':
     style.use('fivethirtyeight')
 
@@ -117,7 +136,12 @@ if __name__ == '__main__':
     anim_interval = 1000
     repeat = True
     writeToFile = False
-    visual = True
+    visual = False
+    nv_max_it = 1000 # pref_step_size * loops
+
+    S = 1
+    _threshold = (Decimal(2) + Decimal(math.sqrt(Decimal(5)))) / Decimal(math.sqrt(Decimal(5)))
+    threshold = 2
 
     if visual:
         fig = plt.figure(figsize=(10, 7))
@@ -168,7 +192,12 @@ if __name__ == '__main__':
         plt.show()
 
     else:
-        for i in range(0, 20):
+        tCount = 0
+        sFlag = False
+        for i in range(0, nv_max_it):
             fire.increment(barrier_set)
-            res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs, (fire.cs / fire.t))
+            res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs,
+                                                                               (fire.cs / fire.t))
+            sFlag, tCount = threshold_check(i, fire.cs, fire.t, tCount, sFlag)
+
             print(res_str)

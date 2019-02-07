@@ -33,7 +33,13 @@ barrier_set = []
 
 def define_barriers(ind):
     if ind == 0:
+        return barrier_set0()
+    elif ind == 1:
         return barrier_set1()
+    elif ind == 2:
+        return barrier_set2()
+    elif ind == 3:
+        return barrier_set3()
 
     # by default return
     return in_barrier_set
@@ -119,13 +125,15 @@ def threshold_check(i, cs, t, occ, flag):
     if slope >= threshold:
         occ += 1
         if occ >= 1:
-            inp = input("Threshold Passed, Continue? [y/n/s]")
+            inp = input("Threshold Passed, Continue? [y/n/s]\n")
             if inp == "n":
                 exit()
             elif inp == "s":
                 return True, occ
             else:
                 return False, occ
+
+    return False, occ
 
 
 if __name__ == '__main__':
@@ -137,11 +145,13 @@ if __name__ == '__main__':
     repeat = True
     writeToFile = False
     visual = False
-    nv_max_it = 1000 # pref_step_size * loops
+    nv_max_it = 1000000 # pref_step_size * loops
+
+    barrier_set_id = 3
 
     S = 1
     _threshold = (Decimal(2) + Decimal(math.sqrt(Decimal(5)))) / Decimal(math.sqrt(Decimal(5)))
-    threshold = 2
+    threshold = 1.95
 
     if visual:
         fig = plt.figure(figsize=(10, 7))
@@ -164,6 +174,9 @@ if __name__ == '__main__':
         # ax2.set_yticks(np.arange(ax2_dim[2]-1, ax2_dim[3]+1, ax2_dim[4]))
         # ax2.grid(True)
 
+    # functionally generate barriers
+    in_barrier_set = define_barriers(barrier_set_id)
+
     # data output
     if writeToFile:
         file = open(dir + "hf_table" + time_code + ".csv", "w+")
@@ -171,9 +184,6 @@ if __name__ == '__main__':
 
     # i, t, 2t, cst, qst
     print("  i |   TIME | 2 x TIME |   LENGTH |   SLOPE")
-
-    # functionally generate barriers
-    in_barrier_set = define_barriers(0)
 
     # convert barrier set to decimal object for precision
     barrier_set = d_barrier_set(in_barrier_set)
@@ -192,12 +202,28 @@ if __name__ == '__main__':
         plt.show()
 
     else:
-        tCount = 0
-        sFlag = False
+        # print info at each iteration
+        print_flag = False
+        ignore_ind = 2 # number of iteration to ignore threshold and max cs count
+
+        # variables
+        tCount = 0      # number of times threshold is passed
+        sFlag = False   # flag to suppress threshold warnings
+        max_cs = 0      # max consumption reached
         for i in range(0, nv_max_it):
             fire.increment(barrier_set)
-            res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs,
-                                                                               (fire.cs / fire.t))
-            sFlag, tCount = threshold_check(i, fire.cs, fire.t, tCount, sFlag)
+            if print_flag:
+                res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs,
+                                                                                   (fire.cs / fire.t))
+                print(res_str)
 
-            print(res_str)
+            if i > ignore_ind:
+                sFlag, tCount = threshold_check(i, fire.cs, fire.t, tCount, sFlag)
+                max_cs = max(max_cs, fire.cs/fire.t)
+
+        res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs,
+                                                                           (fire.cs / fire.t))
+        print(res_str)
+        print("Max slope in simulation: " + str(max_cs))
+        fire.print_bound_points()
+

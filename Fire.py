@@ -116,5 +116,13 @@ class Fire:
             print(point.p_type + " : (" + str(a) + ", " + str(b) + ")")
         print("###############\n")
 
+    def get_bound_str(self):
+        string = ""
+        for point in self.queue_neg + self.queue_pos:
+            a, b = point.get_coord()
+            string += point.p_type + " : (" + str(a) + ", " + str(b) + ")\n"
+        return string
+
+
 def get_xx_yy(coord1, coord2):
     return [coord1[0], coord2[0]], [coord1[1], coord2[1]]

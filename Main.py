@@ -63,6 +63,8 @@ def animate(i):
     # l1 fire simulation
     # ax1.clear()
     coords = boundary2flist(fire.get_boundary())
+    bound_string = fire.get_bound_str()
+
     for (c1, c2) in coords:
         if fire.t >= end_time:
             ax1.plot(c1, c2, linestyle='-', linewidth=2, color='r')
@@ -104,7 +106,8 @@ def animate(i):
         for (c1, c2) in coords:
             ax1.plot(c1, c2, linestyle='-', linewidth=2, color='r')
 
-        fire.print_bound_points()
+        # fire.print_bound_points()
+        print(bound_string)
 
         ani.event_source.stop()
 
@@ -136,6 +139,30 @@ def threshold_check(i, cs, t, occ, flag):
     return False, occ
 
 
+def function_test(bset, t, z_index):
+    print("Function Test")
+    print("z_index: " + str(z_index) + " num_bar: " + str(len(bset)))
+    print(f_p(Decimal(t), z_index, bset, z_index))
+    print("Function Test")
+
+
+# gets index of right most barrier given time t
+def f_p(t, i, bset, z_index):
+    print(t)
+    # there is no barrier to the right
+    if i >= len(bset):
+        return i
+
+    c_prev = (0, 0) if i == z_index else bset[i-1]
+    c = bset[i]
+
+    dist_to_next_bar = (abs(c[0] - c_prev[0]) + abs(c[1] - c_prev[1]))
+    if t > dist_to_next_bar:
+        return f_p(t-dist_to_next_bar, i+1, bset, z_index)
+    else:
+        return i
+
+
 if __name__ == '__main__':
     style.use('fivethirtyeight')
 
@@ -143,8 +170,10 @@ if __name__ == '__main__':
     end_time = 40
     anim_interval = 1000
     repeat = True
-    writeToFile = False
-    visual = False
+    writeToFile = True
+    visual = True
+    runFunction = True
+
     nv_max_it = 1000000 # pref_step_size * loops
 
     barrier_set_id = 3
@@ -190,6 +219,11 @@ if __name__ == '__main__':
 
     # placeholder - to draw final boundary in red
     coords = None
+
+    if runFunction:
+        z_ind = barrier_set.index((1, 2))
+        print(z_ind)
+        function_test(barrier_set, 25.5, z_ind)
 
     if visual:
         # draw barriers

@@ -72,7 +72,7 @@ def barrier_set2():
 def barrier_set3():
     bset = [(-4, 5), (-1, 1), (1, 2)]
 
-    for i in range(0, 10):
+    for i in range(0, 1):
         # d side
         (bx0, by0) = bset[0]
         (bx1, by1) = bset[1]

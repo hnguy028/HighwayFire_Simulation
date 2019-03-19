@@ -11,8 +11,8 @@ class Fire:
     cs_t = [0]
     qst = [0]
 
-    cst_lhs = [0]
-    cst_rhs = [0]
+    cst_lhs = [Decimal(0)]
+    cst_rhs = [Decimal(0)]
 
     t = Decimal(0.0)
     time_step = 1.0
@@ -50,6 +50,7 @@ class Fire:
             exit()
 
         csp_neg = Decimal(0.0)
+        csp_pos = Decimal(0.0)
 
         i = 0
         prev_length = len(self.queue_neg)
@@ -66,7 +67,6 @@ class Fire:
 
         i = 0
         prev_length = len(self.queue_pos)
-        csp_pos = Decimal(0.0)
 
         # move all boundary points to the right of the origin
         while i < len(self.queue_pos):
@@ -79,11 +79,11 @@ class Fire:
             prev_length = len(self.queue_pos)
 
         # save lhs and rhs consumption
-        csp = csp_pos + csp_pos
         self.cst_lhs.append(csp_neg)
-        self.cst_lrhs.append(csp_pos)
+        self.cst_rhs.append(csp_pos)
 
         # save total consumption and time
+        csp = csp_neg + csp_pos
         self.cs += csp
         self.cst.append(self.cs)
         self.cs_t.append(self.t)

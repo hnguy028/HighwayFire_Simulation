@@ -102,9 +102,6 @@ def animate(i):
     ax2.set_xlim([ax2_dim[0]-1, ax2_dim[1]+1])
     ax2.set_ylim([ax2_dim[2]-1, ax2_dim[3]+1])
 
-    if step_flag:
-        asd = input("t")
-
     if fire.t >= end_time + 1:
         for (c1, c2) in coords:
             ax1.plot(c1, c2, linestyle='-', linewidth=2, color='r')
@@ -179,11 +176,10 @@ if __name__ == '__main__':
     writeToFile = True
     visual = True
     runFunction = True
-    step_flag = True
 
     nv_max_it = 1000000 # pref_step_size * loops
 
-    barrier_set_id = 3
+    barrier_set_id = 2
 
     S = 1
     _threshold = (Decimal(2) + Decimal(math.sqrt(Decimal(5)))) / Decimal(math.sqrt(Decimal(5)))

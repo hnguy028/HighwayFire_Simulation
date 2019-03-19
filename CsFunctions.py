@@ -17,29 +17,27 @@ def f_v1(i, t):
     ci_m2, di_m2 = pi_m2 = barriers[i-2]
 
     if di_m1 >= Decimal(2.0) * di_m2:
-        if t > 0:
-            pass
-        elif 10 > t > 0:
-            pass
-        elif 10 > t > 0:
-            pass
-        elif 10 > t > 0:
-            pass
+        if ci_m1 + di_m2 < t <= ci_m1 + Decimal(2.0) * di_m2:
+            return Decimal(3.0) * (t - (ci_m1 + di_m2))
+        elif ci_m1 + Decimal(2.0) * di_m2 <= t <= ci_m1 + di_m1:
+            return Decimal(3.0) * di_m2 + (t - (ci_m1 + Decimal(2.0) * di_m2))
+        elif ci_m1 + di_m1 <= t <= ci_m1 + Decimal(2.0) * di_m1:
+            return Decimal(3.0) * di_m2 + di_m1 - Decimal(2.0) * di_m2
+        elif ci_m1 + Decimal(2.0) * di_m1 <= t <= ci + di_m1:
+            return Decimal(3.0) * di_m2 + di_m1 - Decimal(2.0) * di_m2 + t - (ci_m1 + Decimal(2.0) * di_m1)
         else:
-            # this would be the forward recursive call
-            pass
+            return Decimal(3.0) * di_m2 + di_m1 - Decimal(2.0) * di_m2 + (ci - ci_m1 - di_m1) + f_v1(i+1, t)
     else:
-        if t > 0:
-            pass
-        elif 10 > t > 0:
-            pass
-        elif 10 > t > 0:
-            pass
-        elif 10 > t > 0:
-            pass
+        if ci_m1 + di_m2 < t <= ci_m1 + di_m1:
+            return Decimal(3.0) * (t - (ci_m1 + di_m2))
+        elif ci_m1 + di_m1 <= t <= ci_m1 + Decimal(2.0) * di_m2:
+            return Decimal(3.0) * (di_m1 - di_m2) + Decimal(2.0) * (t - (ci_m1 + Decimal(2.0) * di_m1))
+        elif ci_m1 + Decimal(2.0) * di_m2 <= t <= ci_m1 + Decimal(2.0) * di_m1:
+            return Decimal(3.0) * (di_m1 - di_m2) + Decimal(2.0) * (di_m1 - Decimal(2.0) * (di_m1 - di_m2))
+        elif ci_m1 + Decimal(2.0) * di_m1 <= t <= ci + di_m1:
+            return Decimal(3.0) * (di_m1 - di_m2) + Decimal(2.0) * (di_m1 - Decimal(2.0) * (di_m1 - di_m2)) + (t - (ci_m1 + Decimal(2.0) * di_m1))
         else:
-            # this would be the forward recursive call
-            pass
+            return Decimal(3.0) * (di_m1 - di_m2) + Decimal(2.0) * (di_m1 - Decimal(2.0) * (di_m1 - di_m2)) + (ci - ci_m1 - di_m1) + f_v1(i+1, t)
 
 
 # Base case for f_v1
@@ -53,13 +51,13 @@ def f_v1_0(t):
         return b1[0] + b1[1] + f_v1(1, t)
 
 
-# need to calculate the distance between to barriers given index i
-def get_ci():
-    pass
-
-
 if __name__ == "__main__":
-    barriers = []
+    barriers = barrier_set2()
     index_b0 = 0
+
+    barriers = [i for i in barriers if i[0] > 0]
+    print(barriers)
+
+    print(f_v1_0(64))
 
     print("Hello World")

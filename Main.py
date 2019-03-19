@@ -22,7 +22,7 @@ in_barrier_set = [(-1, 2), (-3, 4), (3, 3)]
 # in_barrier_set = [(1, 4), (2, 5), (3, 9)]
 # in_barrier_set = [(-2.5, 3.6), (0.8, 4.3), (3.1, 7.6)]
 
-# causes rounding error when k intervals are extremely close together ie smaller than (10^(-10))
+
 # in_barrier_set = [(-1.5, 3.6), (0.8, 4.3), (3.1, 7.6)]
 # in_barrier_set = [(-150, 360), (80, 430), (310, 760)]
 # in_barrier_set = [('-1.5', '3.6'), ('0.8', '4.3'), ('3.1', '7.6')]
@@ -102,6 +102,9 @@ def animate(i):
     ax2.set_xlim([ax2_dim[0]-1, ax2_dim[1]+1])
     ax2.set_ylim([ax2_dim[2]-1, ax2_dim[3]+1])
 
+    if step_flag:
+        asd = input("t")
+
     if fire.t >= end_time + 1:
         for (c1, c2) in coords:
             ax1.plot(c1, c2, linestyle='-', linewidth=2, color='r')
@@ -139,6 +142,7 @@ def threshold_check(i, cs, t, occ, flag):
     return False, occ
 
 
+# given the barrier set, a time t, and the zero index, determine the right most barrier at time t
 def function_test(bset, t, z_index):
     print("Function Test")
     print("z_index: " + str(z_index) + " num_bar: " + str(len(bset)))
@@ -170,9 +174,12 @@ if __name__ == '__main__':
     end_time = 40
     anim_interval = 1000
     repeat = True
+
+    # instructions
     writeToFile = True
     visual = True
     runFunction = True
+    step_flag = True
 
     nv_max_it = 1000000 # pref_step_size * loops
 
@@ -181,6 +188,28 @@ if __name__ == '__main__':
     S = 1
     _threshold = (Decimal(2) + Decimal(math.sqrt(Decimal(5)))) / Decimal(math.sqrt(Decimal(5)))
     threshold = 1.95
+
+    # functionally generate barriers
+    in_barrier_set = define_barriers(barrier_set_id)
+
+    # convert barrier set to decimal object for precision
+    barrier_set = d_barrier_set(in_barrier_set)
+
+    # data output
+    if writeToFile:
+        file = open(dir + "hf_table" + time_code + ".csv", "w+")
+        file.write("time,length,slope\n")
+
+    # i, t, 2t, cst, qst
+    print("  i |   TIME | 2 x TIME |   LENGTH |   SLOPE")
+
+    # placeholder - to draw final boundary in red
+    coords = None
+
+    # if runFunction:
+    #     z_ind = barrier_set.index((1, 2))
+    #     print(z_ind)
+    #     function_test(barrier_set, 25.5, z_ind)
 
     if visual:
         fig = plt.figure(figsize=(10, 7))
@@ -195,37 +224,14 @@ if __name__ == '__main__':
         s2_line = 25
         # ax2_dim = [0, max_frames * time_step, 0, max_frames * time_step, 1]
 
-        ax1.set_xticks(np.arange(ax1_dim[0]-1, ax1_dim[1]+1, ax1_dim[4]))
-        ax1.set_yticks(np.arange(ax1_dim[2]-1, ax1_dim[3]+1, ax1_dim[4]))
+        ax1.set_xticks(np.arange(ax1_dim[0] - 1, ax1_dim[1] + 1, ax1_dim[4]))
+        ax1.set_yticks(np.arange(ax1_dim[2] - 1, ax1_dim[3] + 1, ax1_dim[4]))
         ax1.grid(True)
 
         # ax2.set_xticks(np.arange(ax2_dim[0]-1, ax2_dim[1]+1, ax2_dim[4]))
         # ax2.set_yticks(np.arange(ax2_dim[2]-1, ax2_dim[3]+1, ax2_dim[4]))
         # ax2.grid(True)
 
-    # functionally generate barriers
-    in_barrier_set = define_barriers(barrier_set_id)
-
-    # data output
-    if writeToFile:
-        file = open(dir + "hf_table" + time_code + ".csv", "w+")
-        file.write("time,length,slope\n")
-
-    # i, t, 2t, cst, qst
-    print("  i |   TIME | 2 x TIME |   LENGTH |   SLOPE")
-
-    # convert barrier set to decimal object for precision
-    barrier_set = d_barrier_set(in_barrier_set)
-
-    # placeholder - to draw final boundary in red
-    coords = None
-
-    if runFunction:
-        z_ind = barrier_set.index((1, 2))
-        print(z_ind)
-        function_test(barrier_set, 25.5, z_ind)
-
-    if visual:
         # draw barriers
         ax1.axhline(y=0, linestyle='solid', color='black')
         for (x, y) in barrier_set:

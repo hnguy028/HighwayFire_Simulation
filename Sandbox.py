@@ -1,21 +1,13 @@
 ##
 #
 ##
-
+from BarrierFactory import *
 
 if __name__ == '__main__':
+    b1 = barrier_set7()
+    b2 = barrier_set7_v2()
 
-    li = [0,1,2,3,4,5,6,7,8,9]
+    print(sorted(b1, key=lambda x: x[0]))
+    print(sorted(b2, key=lambda x: x[0]))
 
-    # li.insert(4, 7)
-
-    i = 0
-
-    pr = len(li)
-
-    while i < len(li):
-        print(str(i) + " - " + str(len(li)) + " - " + str(li[i]))
-        if i == 3:
-            del li[i]
-        if pr == len(li):
-            i += 1
+    print(sorted(b2, key=lambda x: x[0]) == sorted(b1, key=lambda x: x[0]))

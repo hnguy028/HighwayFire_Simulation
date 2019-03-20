@@ -11,6 +11,9 @@ class Fire:
     cs_t = [0]
     qst = [0]
 
+    cs_l = Decimal(0.0)
+    cs_r = Decimal(0.0)
+
     cst_lhs = [Decimal(0)]
     cst_rhs = [Decimal(0)]
 
@@ -85,6 +88,8 @@ class Fire:
         # save total consumption and time
         csp = csp_neg + csp_pos
         self.cs += csp
+        self.cs_l += csp_neg
+        self.cs_r += csp_pos
         self.cst.append(self.cs)
         self.cs_t.append(self.t)
 

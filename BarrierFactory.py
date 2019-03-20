@@ -3,21 +3,12 @@ from decimal import *
 
 # used for testing
 def barrier_set0():
-    # bset = [(-1.5, 3.6), (0.8, 4.3), (3.1, 7.6)]
-    # bset = [ (-5, 9), (-1,4), (1, 4), (5, 9) ]
-    # bset = [(-1, 3), (1, 1), (2, 4)]
-    # bset = [(-2, 2), (1, 1)]
-    # bset = [(-1, 1), (1, 1)]
-    # bset = [(-1, 1), (2, 1)]
-    # bset = [(-1, 1), (3, 1)]
-    # bset = [(-1, 1)]
+    bset = [(1, 1), (2, 2)]
 
-    # bset = [(-4, 2), (-1, 1), (3, 1)]
-    # bset = [(-4, 3), (-1, 1), (1, 3), (5, 4)]
-    # bset = [(-6, 3), (-1, 1), (1, 3), (9, 7)]
-    bset = [(-25, 15), (-4, 5), (-1, 1), (1, 2), (12, 9)]
-    # bset = [(-6, 3), (-1, 1), (1, 3), (9, 9)]
-    # bset = [(-3, 2), (-1, 1), (1, 2), (3, 5)]
+    for i in range(0,5):
+        x, y = bset[len(bset)-1]
+        bset.append((Decimal(x + 2 * y), Decimal('2.7') * Decimal(y)))
+
     return bset
 
 
@@ -27,7 +18,7 @@ def barrier_set0():
 def barrier_set1():
     bset = [(-4, 5), (-1, 1), (1, 2)]
 
-    for i in range(0, 5):
+    for i in range(0, 10):
         (bx0, by0) = bset[0]
         (bx1, by1) = bset[1]
         (dxn, dyn) = bset[len(bset) - 1]
@@ -72,20 +63,153 @@ def barrier_set2():
 def barrier_set3():
     bset = [(-4, 5), (-1, 1), (1, 2)]
 
-    for i in range(0, 1):
+    for i in range(0, 10):
         # d side
         (bx0, by0) = bset[0]
         (bx1, by1) = bset[1]
         (dxn, dyn) = bset[len(bset) - 1]
-        bset.append((Decimal(((2 * by0) - by1 + dyn) + dxn), Decimal(Decimal(2.7) * by0)))
+        bset.append((Decimal(((2 * by0) - by1 + dyn) + dxn), Decimal(Decimal('2.7') * by0)))
 
         # b side
         (bx1, by1) = bset[0]
         (dxn_1, dyn_1) = bset[len(bset) - 2]
         (dxn, dyn) = bset[len(bset) - 1]
-        bset.insert(0, (-Decimal(((2 * dyn) - dyn_1 + by1) - bx1), Decimal(Decimal(2.7) * dyn)))
+        bset.insert(0, (-Decimal(((2 * dyn) - dyn_1 + by1) - bx1), Decimal(Decimal('2.7') * dyn)))
 
     print(bset)
     return bset
 
-# 1.922135634621904939515293147
+
+# 1.919501133786848072562358277
+def barrier_set4():
+    bset = [(-1, 1), (1, Decimal('1.71'))]
+    # bset = [(-3, 5), (-1, 1), (1, Decimal('2.0'))]
+    bset.insert(0, (-2*bset[len(bset)-1][1], Decimal('5.4')))
+
+    # e = 2.71828, eulers constant
+    for i in range(0, 10):
+        # d side
+        (bx0, by0) = bset[0]
+        (bx1, by1) = bset[1]
+        (dxn, dyn) = bset[len(bset) - 1]
+        # bset.append((Decimal(((2 * by0) - by1 + dyn) + dxn), Decimal(Decimal('2.71828') * by0)))
+        # bset.append((Decimal(((2 * by0) + abs(bx0)) - dyn), Decimal(Decimal('2.71828') * by0)))
+        bset.append((Decimal(((2 * by0) + abs(bx0))), Decimal(Decimal('3.0') * by0)))
+
+        # b side
+        (bx1, by1) = bset[0]
+        (dxn_1, dyn_1) = bset[len(bset) - 2]
+        (dxn, dyn) = bset[len(bset) - 1]
+        # bset.insert(0, (-Decimal(((2 * dyn) + abs(dxn) - abs(by1))), Decimal(Decimal('2.71828') * dyn)))
+        bset.insert(0, (-Decimal(((2 * dyn) + abs(dxn))), Decimal(Decimal('3.0') * dyn)))
+
+    print(bset)
+    return bset
+
+
+# Max slope in simulation: 1.909090691376169890151095273, 1.118420935352472970684445554, 1.118420935352472970684445554
+def barrier_set5():
+    mult = Decimal('3.0')
+
+    # bset = [(-1, 1), (1, Decimal('2.0'))]
+    # bset.insert(0, (-2 * bset[len(bset) - 1][1], mult * Decimal('2.0')))
+    bset = [(-6, 9), (-1, 1), (1, Decimal('3.0'))]
+
+
+    # e = 2.71828, eulers constant
+    for i in range(0, 10):
+        # d side
+        (bx0, by0) = bset[0]
+        (bx1, by1) = bset[1]
+        (dxn, dyn) = bset[len(bset) - 1]
+        # bset.append((Decimal(((2 * by0) - by1 + dyn) + dxn), Decimal(Decimal('2.71828') * by0)))
+        # bset.append((Decimal(((2 * by0) + abs(bx0)) - dyn), Decimal(Decimal('2.71828') * by0)))
+        bset.append((Decimal(((2 * by0) + abs(bx0)) - dyn), Decimal(mult * by0)))
+
+        # b side
+        (bx1, by1) = bset[0]
+        (dxn_1, dyn_1) = bset[len(bset) - 2]
+        (dxn, dyn) = bset[len(bset) - 1]
+        # bset.insert(0, (-Decimal(((2 * dyn) + abs(dxn) - abs(by1))), Decimal(Decimal('2.71828') * dyn)))
+        bset.insert(0, (-Decimal(((2 * dyn) + abs(dxn) - abs(by1))), Decimal(mult * dyn)))
+
+    print(bset)
+    return bset
+
+
+# Max slope in simulation: 1.899999774198744243949655352, 1.140624834618166422636583344, 1.140624834618166422636583344
+def barrier_set6():
+    mult = Decimal('3.0')
+
+    # bset = [(-1, 1), (1, Decimal('2.0'))]
+    # bset.insert(0, (-2 * bset[len(bset) - 1][1], mult * Decimal('2.0')))
+    bset = [(-5, 9), (-1, 1), (1, Decimal('3.0'))]
+
+    # e = 2.71828, eulers constant
+    for i in range(0, 10):
+        # d side
+        (bx0, by0) = bset[0]
+        (bx1, by1) = bset[1]
+        (dxn, dyn) = bset[len(bset) - 1]
+        # bset.append((Decimal(((2 * by0) - by1 + dyn) + dxn), Decimal(Decimal('2.71828') * by0)))
+        # bset.append((Decimal(((2 * by0) + abs(bx0)) - dyn), Decimal(Decimal('2.71828') * by0)))
+        bset.append((Decimal(((2 * by0) + abs(bx0)) - Decimal('2.0') * dyn), Decimal(mult * by0)))
+
+        # b side
+        (bx1, by1) = bset[0]
+        (dxn_1, dyn_1) = bset[len(bset) - 2]
+        (dxn, dyn) = bset[len(bset) - 1]
+        # bset.insert(0, (-Decimal(((2 * dyn) + abs(dxn) - abs(by1))), Decimal(Decimal('2.71828') * dyn)))
+        bset.insert(0, (-Decimal(((2 * dyn) + abs(dxn) - Decimal('2.0') * abs(by1))), Decimal(mult * dyn)))
+
+    print(bset)
+    return bset
+
+
+# Max slope in simulation: 1.891890110554033432594262029, 1.163633441286720624885688263, 1.163633441286720624885688263
+def barrier_set7():
+    mult = Decimal('3.0')
+    dist_offset_mult = Decimal('2.75')
+
+    # bset = [(-1, 1), (1, Decimal('2.0'))]
+    # bset.insert(0, (-2 * bset[len(bset) - 1][1], mult * Decimal('2.0')))
+    bset = [(-5, 9), (-1, 1), (1, Decimal('3.0'))]
+
+
+    # e = 2.71828, eulers constant
+    for i in range(0, 10):
+        # d side
+        (bx0, by0) = bset[0]
+        (bx1, by1) = bset[1]
+        (dxn, dyn) = bset[len(bset) - 1]
+        # bset.append((Decimal(((2 * by0) - by1 + dyn) + dxn), Decimal(Decimal('2.71828') * by0)))
+        # bset.append((Decimal(((2 * by0) + abs(bx0)) - dyn), Decimal(Decimal('2.71828') * by0)))
+        bset.append((Decimal(((2 * by0) + abs(bx0)) - dist_offset_mult * dyn), Decimal(mult * by0)))
+
+        # b side
+        (bx1, by1) = bset[0]
+        (dxn_1, dyn_1) = bset[len(bset) - 2]
+        (dxn, dyn) = bset[len(bset) - 1]
+        # bset.insert(0, (-Decimal(((2 * dyn) + abs(dxn) - abs(by1))), Decimal(Decimal('2.71828') * dyn)))
+        bset.insert(0, (-Decimal(((2 * dyn) + abs(dxn) - dist_offset_mult * abs(by1))), Decimal(mult * dyn)))
+
+    # print(bset)
+    return bset
+
+
+# Max slope in simulation: 1.891890110554033432594262029, 1.163633441286720624885688263, 1.163633441286720624885688263
+# linear loop, create ith barrier using information from previous 2 barriers
+def barrier_set7_v2():
+    beta = Decimal('3.0')
+    alpha = Decimal('2.75')
+
+    bset = [(-1, 1), (1, 3), (-5, 9)]
+
+    # e = 2.71828, eulers constant
+    for i in range(4, 24):
+        (xi_m1, yi_m1) = bset[len(bset) - 1]
+        (xi_m2, yi_m2) = bset[len(bset) - 2]
+        bset.append((Decimal(((2 * yi_m1) + abs(xi_m1)) - alpha * yi_m2) * ((-1)**i), Decimal(beta * yi_m1)))
+
+    # print(bset)
+    return bset

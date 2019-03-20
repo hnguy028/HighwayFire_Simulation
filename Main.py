@@ -40,9 +40,14 @@ def define_barriers(ind):
         return barrier_set2()
     elif ind == 3:
         return barrier_set3()
-
+    elif ind == 4:
+        return barrier_set4()
+    elif ind == 5:
+        return barrier_set5()
+    else:
+        return eval('barrier_set' + str(ind))()
     # by default return
-    return in_barrier_set
+    # return in_barrier_set
 
 
 def d_barrier_set(_barrier_set):
@@ -87,7 +92,7 @@ def animate(i):
 
     # print table for time vs barrier consumed
     if fire.t > 0:
-        res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i+1, fire.t, 2*fire.t, fire.cs, (fire.cs / fire.t))
+        res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f} | {:8.2f} | {:7.5f}".format(i+1, fire.t, 2*fire.t, fire.cs, (fire.cs / fire.t), fire.cs_r, (fire.cs_r/fire.t))
         print(res_str)
         if writeToFile:
             file.write("{:4.2f},{:6.2f},{:7.5f}\n".format(fire.t, fire.cs, (fire.cs / fire.t)))
@@ -168,20 +173,21 @@ if __name__ == '__main__':
     style.use('fivethirtyeight')
 
     time_code = time.strftime("%Y%m%d-%H%M%S")
-    end_time = 40
+    end_time = 20
     anim_interval = 1000
     repeat = True
 
     # instructions
-    writeToFile = True
-    visual = True
-    runFunction = True
+    writeToFile = False
+    visual = False
+    runFunction = False
 
-    nv_max_it = 1000000 # pref_step_size * loops
+    nv_max_it = 100000 # pref_step_size * loops
 
-    barrier_set_id = 2
+    barrier_set_id = '7_v2'
 
     S = 1
+    # '1.894427190999915835106747838'
     _threshold = (Decimal(2) + Decimal(math.sqrt(Decimal(5)))) / Decimal(math.sqrt(Decimal(5)))
     threshold = 1.95
 
@@ -246,20 +252,43 @@ if __name__ == '__main__':
         tCount = 0      # number of times threshold is passed
         sFlag = False   # flag to suppress threshold warnings
         max_cs = 0      # max consumption reached
+
+        # temp variables
+        max_csr = 0
+        max_csl = 0
+
         for i in range(0, nv_max_it):
             fire.increment(barrier_set)
             if print_flag:
                 res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs,
                                                                                    (fire.cs / fire.t))
+
+                res_str2 = " | {:8.2f} | {:7.5f} | {:8.2f} | {:7.5f}".format(fire.cs_r, (fire.cs_r / fire.t), fire.cs_l,
+                                                                             (fire.cs_l / fire.t))
+                res_str += res_str2
                 print(res_str)
 
             if i > ignore_ind:
                 sFlag, tCount = threshold_check(i, fire.cs, fire.t, tCount, sFlag)
                 max_cs = max(max_cs, fire.cs/fire.t)
+                max_csr = max(max_csr, fire.cs_r / fire.t)
+                max_csl = max(max_csr, fire.cs_l / fire.t)
+
+            # if 865 >= i >= 860:
+            #     fire.print_bound_points()
 
         res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs,
                                                                            (fire.cs / fire.t))
+
+        res_str2 = " | {:8.2f} | {:7.5f} | {:8.2f} | {:7.5f}".format(fire.cs_r, (fire.cs_r / fire.t), fire.cs_l, (fire.cs_l / fire.t))
+        res_str += res_str2
+
         print(res_str)
-        print("Max slope in simulation: " + str(max_cs))
         fire.print_bound_points()
+        print("Max slope in simulation: " + str(max_cs) + ", " + str(max_csr) + ", " + str(max_csl))
+        # if max_cs < _threshold:
+        #     for i in range(0, 6):
+        #         print("EEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOORRRRRRRRRRRROOOOOOOOOOOORRRRRRRRRRRR")
+
+
 

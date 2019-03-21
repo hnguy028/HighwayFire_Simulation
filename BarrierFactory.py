@@ -86,7 +86,6 @@ def barrier_set4():
     # bset = [(-3, 5), (-1, 1), (1, Decimal('2.0'))]
     bset.insert(0, (-2*bset[len(bset)-1][1], Decimal('5.4')))
 
-    # e = 2.71828, eulers constant
     for i in range(0, 10):
         # d side
         (bx0, by0) = bset[0]
@@ -111,12 +110,8 @@ def barrier_set4():
 def barrier_set5():
     mult = Decimal('3.0')
 
-    # bset = [(-1, 1), (1, Decimal('2.0'))]
-    # bset.insert(0, (-2 * bset[len(bset) - 1][1], mult * Decimal('2.0')))
     bset = [(-6, 9), (-1, 1), (1, Decimal('3.0'))]
 
-
-    # e = 2.71828, eulers constant
     for i in range(0, 10):
         # d side
         (bx0, by0) = bset[0]
@@ -145,7 +140,6 @@ def barrier_set6():
     # bset.insert(0, (-2 * bset[len(bset) - 1][1], mult * Decimal('2.0')))
     bset = [(-5, 9), (-1, 1), (1, Decimal('3.0'))]
 
-    # e = 2.71828, eulers constant
     for i in range(0, 10):
         # d side
         (bx0, by0) = bset[0]
@@ -175,8 +169,6 @@ def barrier_set7():
     # bset.insert(0, (-2 * bset[len(bset) - 1][1], mult * Decimal('2.0')))
     bset = [(-5, 9), (-1, 1), (1, Decimal('3.0'))]
 
-
-    # e = 2.71828, eulers constant
     for i in range(0, 10):
         # d side
         (bx0, by0) = bset[0]
@@ -205,7 +197,6 @@ def barrier_set7_v2():
 
     bset = [(-1, 1), (1, 3), (-5, 9)]
 
-    # e = 2.71828, eulers constant
     for i in range(4, 24):
         (xi_m1, yi_m1) = bset[len(bset) - 1]
         (xi_m2, yi_m2) = bset[len(bset) - 2]

@@ -263,8 +263,8 @@ if __name__ == '__main__':
                 res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs,
                                                                                    (fire.cs / fire.t))
 
-                res_str2 = " | {:8.2f} | {:7.5f} | {:8.2f} | {:7.5f}".format(fire.cs_r, (fire.cs_r / fire.t), fire.cs_l,
-                                                                             (fire.cs_l / fire.t))
+                res_str2 = " | {:8.2f} | {:7.5f} | {:8.2f} | {:7.5f}".format(fire.cs_l, (fire.cs_l / fire.t), fire.cs_r,
+                                                                             (fire.cs_r / fire.t))
                 res_str += res_str2
                 print(res_str)
 
@@ -280,7 +280,8 @@ if __name__ == '__main__':
         res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs,
                                                                            (fire.cs / fire.t))
 
-        res_str2 = " | {:8.2f} | {:7.5f} | {:8.2f} | {:7.5f}".format(fire.cs_r, (fire.cs_r / fire.t), fire.cs_l, (fire.cs_l / fire.t))
+        res_str2 = " | {:8.2f} | {:7.5f} | {:8.2f} | {:7.5f}".format(fire.cs_l, (fire.cs_l / fire.t), fire.cs_r,
+                                                                     (fire.cs_r / fire.t))
         res_str += res_str2
 
         print(res_str)

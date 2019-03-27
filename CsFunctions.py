@@ -101,7 +101,7 @@ if __name__ == "__main__":
     index_b0 = 0
 
     barriers_pos = [i for i in barriers if i[0] > 0]
-    barriers_pos.insert(0, (0, 0))
+    barriers_pos.append((0, 0))
 
     barriers_neg = [(abs(i[0]), i[1]) for i in barriers if i[0] < 0]
     barriers_neg.append((0, 0))

@@ -49,7 +49,7 @@ class BPoint:
 
                     # reached the top of a barrier
                     if self.y == barrier[1] and d > 0:
-
+                        print("\/ end 1 int")
                         # create a new bpoint
                         ind = bpoint_set.index(self)
                         bpoint_set.insert(ind+1,
@@ -76,7 +76,7 @@ class BPoint:
 
                         # reached the the next barrier
                         if self.x == next_barrier_x and d > 0 and self.y > 0:
-
+                            print("\/ start 3 int")
                             # create a new bpoint
                             ind = bpoint_set.index(self)
                             bpoint_set.insert(ind + 1,
@@ -107,6 +107,7 @@ class BPoint:
                     cs += abs(d)
 
                     if self.y <= 0:
+                        print("^ end 3 int")
                         del bpoint_set[bpoint_set.index(self)]
 
                     # if t_dist > 0: we've already hit y=0 and cannot travel anymore
@@ -128,6 +129,9 @@ class BPoint:
                     self.y -= d
 
                     t_dist -= d
+
+                    if self.y <= 0:
+                        print("^ end 0 int")
 
                 if t_dist > 0 and self.y == 0:
                     # find the next barrier in our respective direction

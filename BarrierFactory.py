@@ -1,4 +1,5 @@
 from decimal import *
+import math
 
 
 # used for testing
@@ -202,5 +203,68 @@ def barrier_set7_v2():
         (xi_m2, yi_m2) = bset[len(bset) - 2]
         bset.append((Decimal(((2 * yi_m1) + abs(xi_m1)) - alpha * yi_m2) * ((-1)**i), Decimal(beta * yi_m1)))
 
+    print(bset)
+    return bset
+
+
+def barrier_set8_sol():
+    beta = Decimal('3.0')
+    alpha = Decimal('2.75')
+
+    mu = (Decimal('2.0') + Decimal(math.sqrt(Decimal('5.0')))) / Decimal(math.sqrt(Decimal('5.0')))
+
+    a1 = Decimal('1.0')
+    s = Decimal('1.0')
+
+    b1 = s * Decimal(math.pow(2.0 + math.sqrt(5.0), 2))
+    d1 = s * Decimal(math.pow(2.0 + math.sqrt(5.0), 3))
+
+    c1 = (mu - 2) * d1 + (2*s) + b1
+
+    a2 = 2*d1 + c1 - a1 - b1
+    b2 = s * Decimal(math.pow(2.0 + math.sqrt(5.0), 4))
+
+    bset = [(-a1, b1), (c1, d1), (-a2, b2)]
+
+    for i in range(4, 24):
+        (xi_m1, yi_m1) = bset[len(bset) - 1]
+        (xi_m2, yi_m2) = bset[len(bset) - 2]
+        bset.append((Decimal(((2 * yi_m1) + abs(xi_m1)) - alpha * yi_m2) * ((-1)**i), Decimal(beta * yi_m1)))
+
     # print(bset)
+    return bset
+
+
+def barrier_set_sol():
+    mu = (Decimal('2.0') + Decimal(math.sqrt(Decimal('5.0')))) / Decimal(math.sqrt(Decimal('5.0')))
+
+    a1 = Decimal('1.0')
+    s = Decimal('1.0')
+
+    b1 = s * Decimal(math.pow(2.0 + math.sqrt(5.0), 2))
+    d1 = s * Decimal(math.pow(2.0 + math.sqrt(5.0), 3))
+
+    c1 = (mu - 2) * d1 + (2*s) + b1
+
+    a2 = 2*d1 + c1 - a1 - b1
+    b2 = s * Decimal(math.pow(2.0 + math.sqrt(5.0), 4))
+
+    bset = [(-a2, b2), (-a1, b1), (c1, d1)]
+    i = 2
+
+    for j in range(0, 10):
+        (bx0, by0) = bset[0]
+        (bx1, by1) = bset[1]
+        (dxn, dyn) = bset[len(bset) - 1]
+        bset.append((Decimal(((2 * by0) - dyn) + dxn), Decimal(s * Decimal(math.pow(Decimal('2.0') + Decimal(math.sqrt(Decimal('5.0'))), (2 * i) + 1)))))
+
+        i += 1
+
+        (bx1, by1) = bset[0]
+        (dxn_1, dyn_1) = bset[len(bset) - 2]
+        (dxn, dyn) = bset[len(bset) - 1]
+        bset.insert(0, (-Decimal(((2 * dyn) - by1) - bx1),
+                     Decimal(s * Decimal(math.pow(Decimal('2.0') + Decimal(math.sqrt(Decimal('5.0'))), 2*i)))))
+
+    print(bset)
     return bset

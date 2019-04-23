@@ -14,7 +14,7 @@ import math
 dir = "data/"
 time_step = Decimal(1)
 
-fire = Fire(time_step)
+fire = Fire(time_step, 1000)
 
 # Test Data
 in_barrier_set = [(-1, 2), (-3, 4), (3, 3)]
@@ -87,7 +87,7 @@ def animate(i):
     ax2.grid(True)
 
     # if time step != 1, then we need eto give a a second array for the according time increments for each cst
-    ax2.plot([0, s2_line], [0, 2 * s2_line], linestyle='dashed', linewidth=2, color='grey')
+    ax2.plot([0, s2_line], [0, _threshold * s2_line], linestyle='dashed', linewidth=2, color='grey')
     ax2.plot(fire.cs_t, fire.get_modded_cst(), linewidth=1, color='r')
 
     # print table for time vs barrier consumed
@@ -173,7 +173,7 @@ if __name__ == '__main__':
     style.use('fivethirtyeight')
 
     time_code = time.strftime("%Y%m%d-%H%M%S")
-    end_time = 20
+    end_time = 25
     anim_interval = 1000
     repeat = True
 
@@ -182,14 +182,15 @@ if __name__ == '__main__':
     visual = False
     runFunction = False
 
-    nv_max_it = 100000 # pref_step_size * loops
+    nv_max_it = 10000 # pref_step_size * loops
 
     barrier_set_id = '7_v2'
+    # barrier_set_id = '_sol'
 
     S = 1
     # '1.894427190999915835106747838'
     _threshold = (Decimal(2) + Decimal(math.sqrt(Decimal(5)))) / Decimal(math.sqrt(Decimal(5)))
-    threshold = 1.95
+    threshold = 1.90
 
     # functionally generate barriers
     in_barrier_set = define_barriers(barrier_set_id)
@@ -245,7 +246,7 @@ if __name__ == '__main__':
 
     else:
         # print info at each iteration
-        print_flag = False
+        print_flag = True
         ignore_ind = 2 # number of iteration to ignore threshold and max cs count
 
         # variables
@@ -274,8 +275,9 @@ if __name__ == '__main__':
                 max_csr = max(max_csr, fire.cs_r / fire.t)
                 max_csl = max(max_csr, fire.cs_l / fire.t)
 
-            # if 865 >= i >= 860:
-            #     fire.print_bound_points()
+            if fire.t in [7,20.750,62.000,185.750,557.0000,1670.75000,5012.000000,15035.7500000,45107.00000000,135320.750000000,405962.0000000000,1217885.75000000000,3653657.000000000000,10960970.7500000000000,32882912.00000000000000,98648735.750000000000000,295946207.0000000000000000,887838620.75000000000000000,2663515862.000000000000000000,7990547585.750000000000000000,23971642757.00000000000000000]:
+                print(str(fire.t) + ": " + str(fire.cs))
+                pass
 
         res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs,
                                                                            (fire.cs / fire.t))

@@ -3,7 +3,8 @@
 ##
 from BarrierFactory import *
 
-if __name__ == '__main__':
+
+def one():
     kv = [(7, 12), (20.75, 38.75), (62.00, 116.75), (185.750, 350.750), (557.0000, 1052.7500), (1670.75000, 3158.75000),
      (5012.000000, 9476.750000), (15035.7500000, 28430.7500000), (45107.00000000, 85292.75000000),
      (135320.750000000, 255878.750000000), (405962.0000000000, 767636.7500000000),
@@ -62,3 +63,40 @@ if __name__ == '__main__':
     # print(sorted(b2, key=lambda x: x[0]))
     #
     # print(sorted(b2, key=lambda x: x[0]) == sorted(b1, key=lambda x: x[0]))
+
+
+def a(b, i):
+    if i == 1:
+        return b[1][0]
+
+    return b[i][0] - b[i-1][0]
+
+
+def two():
+    barriers = barrier_set7_v2()
+
+    barriers_pos = [i for i in barriers if i[0] > 0]
+    barriers_pos.insert(0, (Decimal(0), Decimal(0)))
+    barriers_pos = sorted(barriers_pos, key=lambda x: abs(x[0]))
+
+    barriers_neg = [(abs(i[0]), i[1]) for i in barriers if i[0] < 0]
+    barriers_neg.append((Decimal(0), Decimal(0)))
+    # barriers_neg.reverse()
+    barriers_neg = sorted(barriers_neg, key=lambda x: abs(x[0]))
+
+    # sorted(barriers_neg, key=abs)
+    # _barriers = sorted(barriers, key=lambda x: abs(x[0]))
+
+    print(barriers_pos)
+    print(barriers_neg)
+
+    for i in range(1, len(barriers_neg)-1):
+        ai = a(barriers_neg, i+1)
+        bi = barriers_neg[i][1]
+
+        print((ai-bi)/bi)
+
+
+if __name__ == '__main__':
+    # one()
+    two()

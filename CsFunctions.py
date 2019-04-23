@@ -106,6 +106,7 @@ def f_slope(i=2):
 
     _, bim1 = barriers_neg[i-1]
     _, bi = barriers_neg[i]
+    _, bip1 = barriers_neg[i+1]
 
     dim1 = Decimal(dim1)
     di = Decimal(di)
@@ -113,16 +114,20 @@ def f_slope(i=2):
     bim1 = Decimal(bim1)
     bi = Decimal(bi)
 
-    # calculate mu
-    c03 = (dim1 - Decimal('2') * dim2 + (Decimal('5') / Decimal('4')) * bi + Decimal('3') * bi)
-    t03 = ((bi / Decimal('4')) + (Decimal('5') / Decimal('4') * bi) + bi)
+    # calculate mu for me
+    c03 = (di - Decimal('2') * dim1 + (Decimal('10') / Decimal('3')) * bi + Decimal('3') * bi)
+    t03 = ((bi / Decimal('4')) + (Decimal('10') / Decimal('3') * bi) + bi)
     slope03 = c03 / t03
 
-    c37 = (bi - Decimal('2') * bim1 + (Decimal('5') / Decimal('4')) * di + Decimal('3') * di)
-    t37 = ((di / Decimal('4')) + (Decimal('5') / Decimal('4') * di) + di)
+    c37 = (bip1 - Decimal('2') * bi + (Decimal('10') / Decimal('3')) * di + Decimal('3') * di)
+    t37 = ((di / Decimal('4')) + (Decimal('10') / Decimal('3') * di) + di)
     slope37 = c37 / t37
 
+    # paper
+    c1 = bi + (dim1 * Decimal('4')) + ((di - dim1*Decimal('2')) * Decimal('2'))
+    t1 = bi + dim1 + (di - Decimal('2')*dim1)
 
+    # print(str(i) + ":" + str(c1/t1) + ": " + str(slope03) + " - " + str(slope37) + " - (" + str(c03) + ", " + str(t03) + ") - (" + str(c37) + ", "+ str(t37) + ")")
     print(str(i) + ": " + str(slope03) + " - " + str(slope37) + " - (" + str(c03) + ", " + str(t03) + ") - (" + str(c37) + ", "+ str(t37) + ")")
 
     # print(str(bi) + " - " + str(bim1))
@@ -179,6 +184,19 @@ if __name__ == "__main__":
     #
     #     cs_t = (cs_t_pos + cs_t_neg) / _t
     #     cs_t_max = max(cs_t_max, cs_t)
+    l = [7, 20.75, 62.00, 185.750, 557.0000, 1670.75000, 5012.000000, 15035.7500000, 45107.00000000, 135320.750000000, 405962.0000000000, 1217885.75000000000, 3653657.000000000000, 10960970.7500000000000, 32882912.00000000000000]
+    l2 = []
+    for _t in l:
+        barriers = barriers_pos
+        cs_t_pos = f_v1_0(Decimal(_t))
+
+        barriers = barriers_neg
+        cs_t_neg = f_v1_0(Decimal(_t))
+
+        l2.append(cs_t_pos + cs_t_neg)
+
+    for i in range(len(l2)-1):
+        print("0: " + str(l2[i+1]-l2[i]))
 
     for i in range(2,10):
         f_slope(i)

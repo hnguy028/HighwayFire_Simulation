@@ -236,18 +236,18 @@ def barrier_set8_sol():
 
 
 def barrier_set_sol():
-    mu = (Decimal('2.0') + Decimal(math.sqrt(Decimal('5.0')))) / Decimal(math.sqrt(Decimal('5.0')))
+    mu = (Decimal('2.0') + Decimal.sqrt(Decimal('5.0'))) / Decimal.sqrt(Decimal('5.0'))
 
     a1 = Decimal('1.0')
     s = Decimal('1.0')
 
-    b1 = s * Decimal(math.pow(2.0 + math.sqrt(5.0), 2))
-    d1 = s * Decimal(math.pow(2.0 + math.sqrt(5.0), 3))
+    b1 = s * Decimal(math.pow(Decimal('2.0') + Decimal.sqrt(Decimal('5.0')), 2))
+    d1 = s * Decimal(math.pow(Decimal('2.0') + Decimal.sqrt(Decimal('5.0')), 3))
 
-    c1 = (mu - 2) * d1 + (2*s) + b1
+    c1 = (mu - Decimal('2.0')) * d1 + (Decimal('2.0')*s) + b1
 
-    a2 = 2*d1 + c1 - a1 - b1
-    b2 = s * Decimal(math.pow(2.0 + math.sqrt(5.0), 4))
+    a2 = Decimal('2.0')*d1 + c1 - a1 - b1
+    b2 = s * Decimal(math.pow(Decimal('2.0') + Decimal.sqrt(Decimal('5.0')), 4))
 
     bset = [(-a2, b2), (-a1, b1), (c1, d1)]
     i = 2
@@ -256,7 +256,7 @@ def barrier_set_sol():
         (bx0, by0) = bset[0]
         (bx1, by1) = bset[1]
         (dxn, dyn) = bset[len(bset) - 1]
-        bset.append((Decimal(((2 * by0) - dyn) + dxn), Decimal(s * Decimal(math.pow(Decimal('2.0') + Decimal(math.sqrt(Decimal('5.0'))), (2 * i) + 1)))))
+        bset.append((Decimal(((Decimal('2.0') * by0) - dyn) + dxn), Decimal(s * Decimal(math.pow(Decimal('2.0') + Decimal.sqrt(Decimal('5.0')), (2 * i) + 1)))))
 
         i += 1
 
@@ -264,7 +264,7 @@ def barrier_set_sol():
         (dxn_1, dyn_1) = bset[len(bset) - 2]
         (dxn, dyn) = bset[len(bset) - 1]
         bset.insert(0, (-Decimal(((2 * dyn) - by1) - bx1),
-                     Decimal(s * Decimal(math.pow(Decimal('2.0') + Decimal(math.sqrt(Decimal('5.0'))), 2*i)))))
+                     Decimal(s * Decimal(math.pow(Decimal('2.0') + Decimal.sqrt(Decimal('5.0')), 2*i)))))
 
     print(bset)
     return bset

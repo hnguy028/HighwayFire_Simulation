@@ -173,7 +173,7 @@ if __name__ == '__main__':
     style.use('fivethirtyeight')
 
     time_code = time.strftime("%Y%m%d-%H%M%S")
-    end_time = 25
+    end_time = 50
     anim_interval = 1000
     repeat = True
 

@@ -99,4 +99,5 @@ def two():
 
 if __name__ == '__main__':
     # one()
-    two()
+    # two()
+    barrier_set_sol()

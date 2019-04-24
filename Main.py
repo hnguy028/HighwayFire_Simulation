@@ -173,8 +173,8 @@ if __name__ == '__main__':
     style.use('fivethirtyeight')
 
     time_code = time.strftime("%Y%m%d-%H%M%S")
-    end_time = 50
-    anim_interval = 1000
+    end_time = 100
+    anim_interval = 100000
     repeat = True
 
     # instructions
@@ -182,15 +182,17 @@ if __name__ == '__main__':
     visual = False
     runFunction = False
 
-    nv_max_it = 10000 # pref_step_size * loops
+    nv_max_it = 100 # pref_step_size * loops
 
     barrier_set_id = '7_v2'
     # barrier_set_id = '_sol'
 
-    S = 1
+    s = Decimal('1.0')
+    s2 = 2*s
     # '1.894427190999915835106747838'
     _threshold = (Decimal(2) + Decimal(math.sqrt(Decimal(5)))) / Decimal(math.sqrt(Decimal(5)))
     threshold = 1.90
+
 
     # functionally generate barriers
     in_barrier_set = define_barriers(barrier_set_id)
@@ -262,7 +264,7 @@ if __name__ == '__main__':
             fire.increment(barrier_set)
             if print_flag:
                 res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs,
-                                                                                   (fire.cs / fire.t))
+                                                                                   ((fire.cs - s2) / fire.t))
 
                 res_str2 = " | {:8.2f} | {:7.5f} | {:8.2f} | {:7.5f}".format(fire.cs_l, (fire.cs_l / fire.t), fire.cs_r,
                                                                              (fire.cs_r / fire.t))
@@ -270,8 +272,8 @@ if __name__ == '__main__':
                 print(res_str)
 
             if i > ignore_ind:
-                sFlag, tCount = threshold_check(i, fire.cs, fire.t, tCount, sFlag)
-                max_cs = max(max_cs, fire.cs/fire.t)
+                sFlag, tCount = threshold_check(i, fire.cs - s2, fire.t, tCount, sFlag)
+                max_cs = max(max_cs, (fire.cs - s2) / fire.t)
                 max_csr = max(max_csr, fire.cs_r / fire.t)
                 max_csl = max(max_csr, fire.cs_l / fire.t)
 
@@ -280,7 +282,7 @@ if __name__ == '__main__':
                 pass
 
         res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f}".format(i + 1, fire.t, 2 * fire.t, fire.cs,
-                                                                           (fire.cs / fire.t))
+                                                                           ((fire.cs - s2) / fire.t))
 
         res_str2 = " | {:8.2f} | {:7.5f} | {:8.2f} | {:7.5f}".format(fire.cs_l, (fire.cs_l / fire.t), fire.cs_r,
                                                                      (fire.cs_r / fire.t))

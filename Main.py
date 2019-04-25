@@ -64,13 +64,13 @@ def boundary2flist(_list):
     return new_list
 
 
-def animate(i):
+def animate(_i):
     # l1 fire simulation
     # ax1.clear()
-    coords = boundary2flist(fire.get_boundary())
+    _coords = boundary2flist(fire.get_boundary())
     bound_string = fire.get_bound_str()
 
-    for (c1, c2) in coords:
+    for (c1, c2) in _coords:
         if fire.t >= end_time:
             ax1.plot(c1, c2, linestyle='-', linewidth=2, color='r')
         else:
@@ -92,10 +92,10 @@ def animate(i):
 
     # print table for time vs barrier consumed
     if fire.t > 0:
-        res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f} | {:8.2f} | {:7.5f}".format(i+1, fire.t, 2*fire.t, fire.cs, (fire.cs / fire.t), fire.cs_r, (fire.cs_r/fire.t))
+        res_str = "{:3.0f} | {:6.2f} | {:8.2f} | {:8.2f} | {:7.5f} | {:8.2f} | {:7.5f}".format(_i + 1, fire.t, 2 * fire.t, (fire.cs - s2), ((fire.cs - s2) / fire.t), fire.cs_r, (fire.cs_r / fire.t))
         print(res_str)
         if writeToFile:
-            file.write("{:4.2f},{:6.2f},{:7.5f}\n".format(fire.t, fire.cs, (fire.cs / fire.t)))
+            file.write("{:4.2f},{:6.2f},{:7.5f}\n".format(fire.t, fire.cs-s2, ((fire.cs-s2) / fire.t)))
 
     # increment logic
     fire.increment(barrier_set)
@@ -108,7 +108,7 @@ def animate(i):
     ax2.set_ylim([ax2_dim[2]-1, ax2_dim[3]+1])
 
     if fire.t >= end_time + 1:
-        for (c1, c2) in coords:
+        for (c1, c2) in _coords:
             ax1.plot(c1, c2, linestyle='-', linewidth=2, color='r')
 
         # fire.print_bound_points()
@@ -153,39 +153,40 @@ def function_test(bset, t, z_index):
 
 
 # gets index of right most barrier given time t
-def f_p(t, i, bset, z_index):
+def f_p(t, _i, _bset, z_index):
     print(t)
     # there is no barrier to the right
-    if i >= len(bset):
-        return i
+    if _i >= len(_bset):
+        return _i
 
-    c_prev = (0, 0) if i == z_index else bset[i-1]
-    c = bset[i]
+    c_prev = (0, 0) if _i == z_index else _bset[_i - 1]
+    c = _bset[_i]
 
     dist_to_next_bar = (abs(c[0] - c_prev[0]) + abs(c[1] - c_prev[1]))
     if t > dist_to_next_bar:
-        return f_p(t-dist_to_next_bar, i+1, bset, z_index)
+        return f_p(t - dist_to_next_bar, _i + 1, _bset, z_index)
     else:
-        return i
+        return _i
 
 
 if __name__ == '__main__':
     style.use('fivethirtyeight')
 
     time_code = time.strftime("%Y%m%d-%H%M%S")
-    end_time = 100
-    anim_interval = 100000
+    end_time = 25
+    anim_interval = 100
     repeat = True
 
     # instructions
     writeToFile = False
     visual = False
+    # visual = True
     runFunction = False
 
-    nv_max_it = 100 # pref_step_size * loops
+    nv_max_it = 10000 # pref_step_size * loops
 
     barrier_set_id = '7_v2'
-    # barrier_set_id = '_sol'
+    barrier_set_id = '_sol'
 
     s = Decimal('1.0')
     s2 = 2*s

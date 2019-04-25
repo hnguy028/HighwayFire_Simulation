@@ -123,9 +123,11 @@ def f_slope(i=2):
     t37 = ((di / Decimal('4')) + (Decimal('10') / Decimal('3') * di) + di)
     slope37 = c37 / t37
 
-    # paper
+    # paper - only one side though
     c1 = bi + (dim1 * Decimal('4')) + ((di - dim1*Decimal('2')) * Decimal('2'))
     t1 = bi + dim1 + (di - Decimal('2')*dim1)
+
+    # todo : enter 2nd cs function definition
 
     # print(str(i) + ":" + str(c1/t1) + ": " + str(slope03) + " - " + str(slope37) + " - (" + str(c03) + ", " + str(t03) + ") - (" + str(c37) + ", "+ str(t37) + ")")
     print(str(i) + ": " + str(slope03) + " - " + str(slope37) + " - (" + str(c03) + ", " + str(t03) + ") - (" + str(c37) + ", "+ str(t37) + ")")

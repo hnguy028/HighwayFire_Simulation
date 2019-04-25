@@ -251,13 +251,6 @@ def barrier_set_sol():
 
     bset = [(-a2, b2), (-a1, b1), (c1, d1)]
 
-    print("a1:" + str(a1))
-    print("b1:" + str(b1))
-    print("a2:" + str(a2))
-    print("b2:" + str(b2))
-    print("c1:" + str(c1))
-    print("d1:" + str(d1))
-
     i = 2
 
     for j in range(0, 10):

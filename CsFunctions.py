@@ -103,6 +103,7 @@ def f_slope(i=2):
     _, dim2 = barriers_pos[i-2]
     _, dim1 = barriers_pos[i-1]
     _, di = barriers_pos[i]
+    _, dip1 = barriers_pos[i+1]
 
     _, bim1 = barriers_neg[i-1]
     _, bi = barriers_neg[i]
@@ -114,7 +115,8 @@ def f_slope(i=2):
     bim1 = Decimal(bim1)
     bi = Decimal(bi)
 
-    # calculate mu for me
+    # todo : barrier_set7_v2()
+    # calculate mu for me (t0 -> t3 & t3 -> t7)
     c03 = (di - Decimal('2') * dim1 + (Decimal('10') / Decimal('3')) * bi + Decimal('3') * bi)
     t03 = ((bi / Decimal('4')) + (Decimal('10') / Decimal('3') * bi) + bi)
     slope03 = c03 / t03
@@ -123,14 +125,29 @@ def f_slope(i=2):
     t37 = ((di / Decimal('4')) + (Decimal('10') / Decimal('3') * di) + di)
     slope37 = c37 / t37
 
-    # paper - only one side though
+    # t1 -> t5 % t5 -> t9
+    _58 = Decimal('5.0') / Decimal('8.0')
+    _103 = Decimal('10.0') / Decimal('3.0')
+    _38 = Decimal('3.0') / Decimal('8.0')
+
+    _c = (_38 * _103 * bi) + (3 * bi) + (bip1 - 2*bi) + (_58 * _103 * di)
+    _t = di + (_58 * _103 * di)
+    _s = _c / _t
+
+    _c2 = (_38 * _103 * di) + (3 * di) + (dip1 - 2 * di) + (_58 * _103 * bip1)
+    _t2 = bip1 + (_58 * _103 * bip1)
+    _s2 = _c2 / _t2
+
+    # todo : paper - barrier_set_sol()
     c1 = bi + (dim1 * Decimal('4')) + ((di - dim1*Decimal('2')) * Decimal('2'))
     t1 = bi + dim1 + (di - Decimal('2')*dim1)
 
-    # todo : enter 2nd cs function definition
+    c2 = di + (bi * Decimal('4')) + ((bip1 - bi * Decimal('2')) * Decimal('2'))
+    t2 = di + bi + (bip1 - Decimal('2') * bi)
 
     # print(str(i) + ":" + str(c1/t1) + ": " + str(slope03) + " - " + str(slope37) + " - (" + str(c03) + ", " + str(t03) + ") - (" + str(c37) + ", "+ str(t37) + ")")
-    print(str(i) + ": " + str(slope03) + " - " + str(slope37) + " - (" + str(c03) + ", " + str(t03) + ") - (" + str(c37) + ", "+ str(t37) + ")")
+    # print(str(i) + ": " + str(c1/t1) + " - " + str(c2/t2)) # barrier_set_sol()
+    # print(str(i) + ": " + str(_s) + " - " + str(_s2))
 
     # print(str(bi) + " - " + str(bim1))
     # print(str(di) + " - " + str(dim1))

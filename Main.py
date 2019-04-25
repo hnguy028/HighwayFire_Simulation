@@ -186,7 +186,7 @@ if __name__ == '__main__':
     nv_max_it = 10000 # pref_step_size * loops
 
     barrier_set_id = '7_v2'
-    barrier_set_id = '_sol'
+    # barrier_set_id = '_sol'
 
     s = Decimal('1.0')
     s2 = 2*s

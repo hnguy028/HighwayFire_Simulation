@@ -2,6 +2,9 @@
 #
 ##
 from BarrierFactory import *
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.widgets import Slider
 
 
 def one():
@@ -97,7 +100,38 @@ def two():
         print((ai-bi)/bi)
 
 
+def plot_lines(line1, line2):
+
+    fig, ax = plt.subplots()
+    plt.subplots_adjust(bottom=0.25)
+    #
+    # t = np.arange(0.0, 1000.0, 0.1)
+    # s = np.sin(2*np.pi*t)
+    plt.axis([0, 1, -1, 1])
+
+    plt.axhline(y=0.5, color='r', linestyle='-')
+    plt.axhline(y=-0.5, color='b', linestyle='-')
+
+    l1, = plt.plot(line1, [0.5]*len(line1), 'bo')
+    l2, = plt.plot(line2, [-0.5]*len(line2), 'ro')
+
+    axcolor = 'lightgoldenrodyellow'
+    axpos = plt.axes([0.2, 0.1, 0.65, 0.03], axisbg=axcolor)
+
+    spos = Slider(axpos, 'Pos', 0.1, 900.0)
+
+    def update(val):
+        pos = spos.val
+        ax.axis([pos,pos+10,-1,1])
+        fig.canvas.draw_idle()
+
+    spos.on_changed(update)
+
+    plt.show()
+
+
 if __name__ == '__main__':
     # one()
     # two()
     barrier_set_sol()
+    # plot_lines([10, 20, 40], [5, 15, 75])
